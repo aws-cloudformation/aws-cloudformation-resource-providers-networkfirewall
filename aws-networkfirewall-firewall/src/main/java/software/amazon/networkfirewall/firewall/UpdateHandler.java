@@ -379,4 +379,3 @@ class SubnetMappingComparator implements Comparator<SubnetMapping> {
         return s1.getSubnetId().compareTo(s2.getSubnetId());
     }
 }
-
