@@ -1,0 +1,18 @@
+{
+    "typeName": "AWS::NetworkFirewall::Firewall",
+    "language": "java",
+    "runtime": "java8",
+    "entrypoint": "software.amazon.networkfirewall.firewall.HandlerWrapper::handleRequest",
+    "testEntrypoint": "software.amazon.networkfirewall.firewall.HandlerWrapper::testEntrypoint",
+    "settings": {
+        "namespace": [
+            "software",
+            "amazon",
+            "networkfirewall",
+            "firewall"
+        ],
+        "codegen_template_path": "guided_aws",
+        "protocolVersion": "2.0.0"
+    },
+    "executableEntrypoint": "software.amazon.networkfirewall.firewall.HandlerWrapperExecutable"
+}
