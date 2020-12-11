@@ -15,20 +15,17 @@
       "type": "object",
       "properties": {
         "LogDestinationConfigs": {
-          "$ref": "#/definitions/LogDestinationConfigs"
+          "type": "array",
+          "insertionOrder": false,
+          "items": {
+            "$ref": "#/definitions/LogDestinationConfig"
+          },
+          "minItems": 1
         }
       },
       "required": [
         "LogDestinationConfigs"
       ]
-    },
-    "LogDestinationConfigs": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": {
-        "$ref": "#/definitions/LogDestinationConfig"
-      },
-      "minItems": 1
     },
     "LogDestinationConfig": {
       "type": "object",
