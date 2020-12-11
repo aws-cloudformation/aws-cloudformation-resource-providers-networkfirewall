@@ -37,41 +37,50 @@
       "type": "object",
       "properties": {
         "StatelessDefaultActions": {
-          "$ref": "#/definitions/StatelessActions"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
         },
         "StatelessFragmentDefaultActions": {
-          "$ref": "#/definitions/StatelessActions"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
         },
         "StatelessCustomActions": {
-          "$ref": "#/definitions/CustomActions"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/CustomAction"
+          }
         },
         "StatelessRuleGroupReferences": {
-          "$ref": "#/definitions/StatelessRuleGroupReferences"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/StatelessRuleGroupReference"
+          }
         },
         "StatefulRuleGroupReferences": {
-          "$ref": "#/definitions/StatefulRuleGroupReferences"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/StatefulRuleGroupReference"
+          }
         }
       },
       "required": [
         "StatelessDefaultActions",
         "StatelessFragmentDefaultActions"
       ]
-    },
-    "StatelessActions": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "type": "string"
-      }
-    },
-    "CustomActions": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/CustomAction"
-      }
     },
     "CustomAction": {
       "type": "object",
@@ -103,20 +112,17 @@
       "type": "object",
       "properties": {
         "Dimensions": {
-          "$ref": "#/definitions/Dimensions"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/Dimension"
+          }
         }
       },
       "required": [
         "Dimensions"
       ]
-    },
-    "Dimensions": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/Dimension"
-      }
     },
     "Dimension": {
       "type": "object",
@@ -132,14 +138,6 @@
         "Value"
       ]
     },
-    "StatefulRuleGroupReferences": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/StatefulRuleGroupReference"
-      }
-    },
     "StatefulRuleGroupReference": {
       "type": "object",
       "properties": {
@@ -150,14 +148,6 @@
       "required": [
         "ResourceArn"
       ]
-    },
-    "StatelessRuleGroupReferences": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/StatelessRuleGroupReference"
-      }
     },
     "StatelessRuleGroupReference": {
       "type": "object",

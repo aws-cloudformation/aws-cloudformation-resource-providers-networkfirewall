@@ -77,7 +77,12 @@
       "type": "object",
       "properties": {
         "Definition": {
-          "$ref": "#/definitions/VariableDefinitionList"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/VariableDefinition"
+          }
         }
       }
     },
@@ -85,16 +90,13 @@
       "type": "object",
       "properties": {
         "Definition": {
-          "$ref": "#/definitions/VariableDefinitionList"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/VariableDefinition"
+          }
         }
-      }
-    },
-    "VariableDefinitionList": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/VariableDefinition"
       }
     },
     "VariableDefinition": {
@@ -112,7 +114,12 @@
           "$ref": "#/definitions/RulesSourceList"
         },
         "StatefulRules": {
-          "$ref": "#/definitions/StatefulRules"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/StatefulRule"
+          }
         },
         "StatelessRulesAndCustomActions": {
           "$ref": "#/definitions/StatelessRulesAndCustomActions"
@@ -131,7 +138,12 @@
           }
         },
         "TargetTypes": {
-          "$ref": "#/definitions/TargetTypes"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/TargetType"
+          }
         },
         "GeneratedRulesType": {
           "$ref": "#/definitions/GeneratedRulesType"
@@ -142,14 +154,6 @@
         "TargetTypes",
         "GeneratedRulesType"
       ]
-    },
-    "TargetTypes": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/TargetType"
-      }
     },
     "TargetType": {
       "type": "string",
@@ -164,14 +168,6 @@
         "ALLOWLIST",
         "DENYLIST"
       ]
-    },
-    "StatefulRules": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/StatefulRule"
-      }
     },
     "StatefulRule": {
       "type": "object",
@@ -188,7 +184,12 @@
           "$ref": "#/definitions/Header"
         },
         "RuleOptions": {
-          "$ref": "#/definitions/RuleOptions"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/RuleOption"
+          }
         }
       },
       "required": [
@@ -259,14 +260,6 @@
         "DestinationPort"
       ]
     },
-    "RuleOptions": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/RuleOption"
-      }
-    },
     "RuleOption": {
       "type": "object",
       "properties": {
@@ -305,23 +298,25 @@
       "type": "object",
       "properties": {
         "StatelessRules": {
-          "$ref": "#/definitions/StatelessRules"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/StatelessRule"
+          }
         },
         "CustomActions": {
-          "$ref": "#/definitions/CustomActions"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/CustomAction"
+          }
         }
       },
       "required": [
         "StatelessRules"
       ]
-    },
-    "StatelessRules": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/StatelessRule"
-      }
     },
     "StatelessRule": {
       "type": "object",
@@ -364,31 +359,53 @@
       "type": "object",
       "properties": {
         "Sources": {
-          "$ref": "#/definitions/Addresses"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/Address"
+          }
         },
         "Destinations": {
-          "$ref": "#/definitions/Addresses"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/Address"
+          }
         },
         "SourcePorts": {
-          "$ref": "#/definitions/PortRanges"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/PortRange"
+          }
         },
         "DestinationPorts": {
-          "$ref": "#/definitions/PortRanges"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/PortRange"
+          }
         },
         "Protocols": {
-          "$ref": "#/definitions/ProtocolNumbers"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/ProtocolNumber"
+          }
         },
         "TCPFlags": {
-          "$ref": "#/definitions/TCPFlags"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/TCPFlagField"
+          }
         }
-      }
-    },
-    "Addresses": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/Address"
       }
     },
     "Address": {
@@ -404,14 +421,6 @@
       "required": [
         "AddressDefinition"
       ]
-    },
-    "PortRanges": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/PortRange"
-      }
     },
     "PortRange": {
       "type": "object",
@@ -433,48 +442,34 @@
       "minimum": 0,
       "maximum": 65535
     },
-    "ProtocolNumbers": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/ProtocolNumber"
-      }
-    },
     "ProtocolNumber": {
       "type": "integer",
       "minimum": 0,
       "maximum": 255
     },
-    "TCPFlags": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/TCPFlagField"
-      }
-    },
     "TCPFlagField": {
       "type": "object",
       "properties": {
         "Flags": {
-          "$ref": "#/definitions/Flags"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/TCPFlag"
+          }
         },
         "Masks": {
-          "$ref": "#/definitions/Flags"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/TCPFlag"
+          }
         }
       },
       "required": [
         "Flags"
       ]
-    },
-    "Flags": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/TCPFlag"
-      }
     },
     "TCPFlag": {
       "type": "string",
@@ -488,14 +483,6 @@
         "ECE",
         "CWR"
       ]
-    },
-    "CustomActions": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/CustomAction"
-      }
     },
     "CustomAction": {
       "type": "object",
@@ -527,20 +514,17 @@
       "type": "object",
       "properties": {
         "Dimensions": {
-          "$ref": "#/definitions/Dimensions"
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/Dimension"
+          }
         }
       },
       "required": [
         "Dimensions"
       ]
-    },
-    "Dimensions": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/Dimension"
-      }
     },
     "Dimension": {
       "type": "object",
