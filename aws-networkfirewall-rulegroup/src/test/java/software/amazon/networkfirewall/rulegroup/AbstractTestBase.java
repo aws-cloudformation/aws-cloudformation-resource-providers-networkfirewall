@@ -163,7 +163,6 @@ public class AbstractTestBase {
                 .description(DESCRIPTION)
                 .type(STATELESS_RULEGROUP_TYPE)
                 .ruleGroupName(STATELESS_RULEGROUP_NAME)
-                .tags(Collections.emptySet())
                 .build();
 
         createStatelessRuleGroupResponse1 = CreateRuleGroupResponse.builder()
@@ -715,7 +714,6 @@ public class AbstractTestBase {
                 .description(DESCRIPTION)
                 .type(STATEFUL_RULEGROUP_TYPE)
                 .ruleGroupName(STATEFUL_RULEGROUP_NAME)
-                .tags(Collections.emptySet())
                 .build();
 
         createStatefulRuleGroupResponse1 = CreateRuleGroupResponse.builder()
