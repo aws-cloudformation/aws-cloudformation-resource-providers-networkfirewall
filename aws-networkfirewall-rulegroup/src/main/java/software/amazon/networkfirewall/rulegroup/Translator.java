@@ -156,7 +156,7 @@ public class Translator {
     }
 
     static Set<software.amazon.awssdk.services.networkfirewall.model.Tag> translateTagsToSdk(final Map<String, String> stackTags) {
-        if (stackTags == null) {
+        if (stackTags == null || stackTags.size() == 0) {
             return null;
         }
         return stackTags.entrySet().stream().map(tag -> software.amazon.awssdk.services.networkfirewall.model.Tag.builder()
