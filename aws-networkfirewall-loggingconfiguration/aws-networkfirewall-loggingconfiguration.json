@@ -25,7 +25,8 @@
       },
       "required": [
         "LogDestinationConfigs"
-      ]
+      ],
+      "additionalProperties": false
     },
     "LogDestinationConfig": {
       "type": "object",
@@ -55,14 +56,16 @@
               "maxLength": 1024
             }
           },
-          "minItems": 1
+          "minItems": 1,
+          "additionalProperties": false
         }
       },
       "required": [
         "LogType",
         "LogDestinationType",
         "LogDestination"
-      ]
+      ],
+      "additionalProperties": false
     }
   },
   "properties": {

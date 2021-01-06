@@ -50,7 +50,8 @@
       },
       "required": [
         "RulesSource"
-      ]
+      ],
+      "additionalProperties": false
     },
     "RuleVariables": {
       "type": "object",
@@ -61,7 +62,8 @@
             "^[A-Za-z0-9_]{1,32}$": {
               "$ref": "#/definitions/IPSet"
             }
-          }
+          },
+          "additionalProperties": false
         },
         "PortSets": {
           "type": "object",
@@ -69,9 +71,11 @@
             "^[A-Za-z0-9_]{1,32}$": {
               "$ref": "#/definitions/PortSet"
             }
-          }
+          },
+          "additionalProperties": false
         }
-      }
+      },
+      "additionalProperties": false
     },
     "IPSet": {
       "type": "object",
@@ -84,7 +88,8 @@
             "$ref": "#/definitions/VariableDefinition"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PortSet": {
       "type": "object",
@@ -97,7 +102,8 @@
             "$ref": "#/definitions/VariableDefinition"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "VariableDefinition": {
       "type": "string",
@@ -124,7 +130,8 @@
         "StatelessRulesAndCustomActions": {
           "$ref": "#/definitions/StatelessRulesAndCustomActions"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RulesSourceList": {
       "type": "object",
@@ -153,7 +160,8 @@
         "Targets",
         "TargetTypes",
         "GeneratedRulesType"
-      ]
+      ],
+      "additionalProperties": false
     },
     "TargetType": {
       "type": "string",
@@ -196,7 +204,8 @@
         "Action",
         "Header",
         "RuleOptions"
-      ]
+      ],
+      "additionalProperties": false
     },
     "Header": {
       "type": "object",
@@ -258,7 +267,8 @@
         "Direction",
         "Destination",
         "DestinationPort"
-      ]
+      ],
+      "additionalProperties": false
     },
     "RuleOption": {
       "type": "object",
@@ -280,7 +290,8 @@
       },
       "required": [
         "Keyword"
-      ]
+      ],
+      "additionalProperties": false
     },
     "Setting": {
       "type": "string",
@@ -316,7 +327,8 @@
       },
       "required": [
         "StatelessRules"
-      ]
+      ],
+      "additionalProperties": false
     },
     "StatelessRule": {
       "type": "object",
@@ -353,7 +365,8 @@
       "required": [
         "MatchAttributes",
         "Actions"
-      ]
+      ],
+      "additionalProperties": false
     },
     "MatchAttributes": {
       "type": "object",
@@ -406,7 +419,8 @@
             "$ref": "#/definitions/TCPFlagField"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Address": {
       "type": "object",
@@ -420,7 +434,8 @@
       },
       "required": [
         "AddressDefinition"
-      ]
+      ],
+      "additionalProperties": false
     },
     "PortRange": {
       "type": "object",
@@ -435,7 +450,8 @@
       "required": [
         "FromPort",
         "ToPort"
-      ]
+      ],
+      "additionalProperties": false
     },
     "PortRangeBound": {
       "type": "integer",
@@ -469,7 +485,8 @@
       },
       "required": [
         "Flags"
-      ]
+      ],
+      "additionalProperties": false
     },
     "TCPFlag": {
       "type": "string",
@@ -500,7 +517,8 @@
       "required": [
         "ActionName",
         "ActionDefinition"
-      ]
+      ],
+      "additionalProperties": false
     },
     "ActionDefinition": {
       "type": "object",
@@ -524,7 +542,8 @@
       },
       "required": [
         "Dimensions"
-      ]
+      ],
+      "additionalProperties": false
     },
     "Dimension": {
       "type": "object",
@@ -538,7 +557,8 @@
       },
       "required": [
         "Value"
-      ]
+      ],
+      "additionalProperties": false
     }
   },
   "properties": {
