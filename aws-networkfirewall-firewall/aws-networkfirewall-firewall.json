@@ -45,7 +45,8 @@
       "required": [
         "Value",
         "Key"
-      ]
+      ],
+      "additionalProperties": false
     }
   },
   "properties": {
