@@ -6,6 +6,7 @@ phases:
         python: 3.7
     commands:
       -  pip install pre-commit cloudformation-cli-java-plugin
+      -  pip install --upgrade 'six==1.15.0'
   build:
     commands:
       - pre-commit run --all-files
