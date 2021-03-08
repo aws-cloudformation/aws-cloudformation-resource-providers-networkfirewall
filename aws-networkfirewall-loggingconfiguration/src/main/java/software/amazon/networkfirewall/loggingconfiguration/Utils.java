@@ -12,12 +12,15 @@ import software.amazon.awssdk.services.networkfirewall.model.ThrottlingException
 import software.amazon.awssdk.services.networkfirewall.model.UpdateLoggingConfigurationRequest;
 import software.amazon.cloudformation.exceptions.CfnAccessDeniedException;
 import software.amazon.cloudformation.exceptions.CfnAlreadyExistsException;
+import software.amazon.cloudformation.exceptions.CfnGeneralServiceException;
 import software.amazon.cloudformation.exceptions.CfnInvalidRequestException;
 import software.amazon.cloudformation.exceptions.CfnNotFoundException;
+import software.amazon.cloudformation.exceptions.CfnNotStabilizedException;
 import software.amazon.cloudformation.exceptions.CfnServiceInternalErrorException;
 import software.amazon.cloudformation.exceptions.CfnThrottlingException;
 import software.amazon.cloudformation.proxy.ProxyClient;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -216,6 +219,36 @@ public class Utils {
                 throw new CfnInvalidRequestException(
                         "We don't support publishing 1 type of log to multiple destinations.");
             }
+        }
+    }
+
+    /**
+     * To stablize the update of loggingConfiguration for 10 seconds.
+     */
+    static void stablize(ProxyClient<NetworkFirewallClient> client, ResourceModel model) throws InterruptedException {
+        int time = 0;
+        do {
+            if (isStable(client, model)) {
+                return;
+            }
+            time++;
+            Thread.sleep(Duration.ofSeconds(2).toMillis());
+        } while (time < 5);
+        throw new CfnNotStabilizedException(ResourceModel.TYPE_NAME, model.getFirewallArn());
+    }
+
+    static boolean isStable(ProxyClient<NetworkFirewallClient> client, ResourceModel model) {
+        final DescribeLoggingConfigurationRequest describeLoggingConfigurationRequest = Translator.translateToReadRequest(model);
+        DescribeLoggingConfigurationResponse describeLoggingConfigurationResponse;
+        try {
+            describeLoggingConfigurationResponse = client.injectCredentialsAndInvokeV2(
+                    describeLoggingConfigurationRequest, client.client()::describeLoggingConfiguration);
+
+            return (model.getLoggingConfiguration() == null && describeLoggingConfigurationResponse.loggingConfiguration() == null)
+                    || describeLoggingConfigurationResponse.loggingConfiguration()
+                    .equals(Translator.toSdkLoggingConfiguration(model.getLoggingConfiguration()));
+        } catch (final Exception e) {
+            throw new CfnGeneralServiceException("Failed to retrieve loggingConfiguration definition.");
         }
     }
 }
