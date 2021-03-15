@@ -36,10 +36,12 @@ public class DeleteHandler extends BaseHandlerStd {
 
         try {
             convertTemplateToUpdateLoggingConfigurationCall(model, proxyClient, true, false);
+
+            Utils.stablize(proxyClient, model);
             return ProgressEvent.defaultSuccessHandler(null);
         } catch(InvalidRequestException e){
             throw new CfnInvalidRequestException(e);
-        } catch (InternalServerErrorException | LogDestinationPermissionException e) {
+        } catch (InternalServerErrorException | LogDestinationPermissionException | InterruptedException e) {
             throw new CfnServiceInternalErrorException(ResourceModel.TYPE_NAME, e);
         } catch (ResourceNotFoundException e) {
             throw new CfnNotFoundException(ResourceModel.TYPE_NAME, e.toString());

@@ -100,7 +100,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertThat(response.getErrorCode()).isNull();
 
         verify(proxyClient.client(), times(1)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
-        verify(proxyClient.client(), times(3)).describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class));
     }
 
     @Test
@@ -146,7 +145,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertThat(response.getErrorCode()).isNull();
 
         verify(proxyClient.client(), times(2)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
-        verify(proxyClient.client(), times(3)).describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class));
     }
 
     @Test
@@ -170,7 +168,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertThrows(CfnAlreadyExistsException.class, () -> handler.handleRequest(proxy, request, new CallbackContext(), proxyClient, logger));
 
         verify(proxyClient.client(), times(0)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
-        verify(proxyClient.client(), times(1)).describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class));
     }
 
     @Test
@@ -196,7 +193,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertThrows(CfnNotFoundException.class, () -> handler.handleRequest(proxy, request, new CallbackContext(), proxyClient, logger));
 
         verify(proxyClient.client(), times(1)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
-        verify(proxyClient.client(), times(1)).describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class));
     }
 
     @Test
@@ -219,7 +215,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertThrows(CfnInvalidRequestException.class, () -> handler.handleRequest(proxy, request, new CallbackContext(), proxyClient, logger));
 
         verify(proxyClient.client(), times(0)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
-        verify(proxyClient.client(), times(1)).describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class));
     }
 
     @Test
@@ -238,6 +233,5 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertThrows(CfnInvalidRequestException.class, () -> handler.handleRequest(proxy, request, new CallbackContext(), proxyClient, logger));
 
         verify(proxyClient.client(), times(0)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
-        verify(proxyClient.client(), times(1)).describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class));
     }
 }
