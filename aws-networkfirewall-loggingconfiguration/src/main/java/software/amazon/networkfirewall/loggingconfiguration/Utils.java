@@ -232,8 +232,8 @@ public class Utils {
                 return;
             }
             time++;
-            Thread.sleep(Duration.ofSeconds(2).toMillis());
-        } while (time < 5);
+            Thread.sleep(Duration.ofSeconds(5).toMillis());
+        } while (time < 120);
         throw new CfnNotStabilizedException(ResourceModel.TYPE_NAME, model.getFirewallArn());
     }
 
@@ -244,7 +244,10 @@ public class Utils {
             describeLoggingConfigurationResponse = client.injectCredentialsAndInvokeV2(
                     describeLoggingConfigurationRequest, client.client()::describeLoggingConfiguration);
 
-            return (model.getLoggingConfiguration() == null && describeLoggingConfigurationResponse.loggingConfiguration() == null)
+            return (model.getLoggingConfiguration() == null &&
+                    (describeLoggingConfigurationResponse.loggingConfiguration() == null ||
+                            CollectionUtils.isNullOrEmpty(
+                                    describeLoggingConfigurationResponse.loggingConfiguration().logDestinationConfigs())))
                     || describeLoggingConfigurationResponse.loggingConfiguration()
                     .equals(Translator.toSdkLoggingConfiguration(model.getLoggingConfiguration()));
         } catch (final Exception e) {
