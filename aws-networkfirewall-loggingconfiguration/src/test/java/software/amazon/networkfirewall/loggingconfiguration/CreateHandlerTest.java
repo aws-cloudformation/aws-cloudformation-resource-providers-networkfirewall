@@ -148,6 +148,50 @@ public class CreateHandlerTest extends AbstractTestBase {
     }
 
     @Test
+    public void handleRequest_SimpleSuccessWith2LogDestinationConfig_InTheOtherOrder() {
+        LogDestinationConfig config1 = buildLogDestinationConfig("FLOW", "S3");
+        LogDestinationConfig config2 = buildLogDestinationConfig("ALERT", "CloudWatchLogs");
+        model = buildResourceModel(buildLoggingConfiguration(Arrays.asList(config1, config2)));
+
+        final DescribeLoggingConfigurationResponse preCheckLoggingConfigurationResponse = DescribeLoggingConfigurationResponse.builder()
+                .firewallArn(firewallArn)
+                .build();
+
+        final DescribeLoggingConfigurationResponse finalLoggingConfigurationResponse = DescribeLoggingConfigurationResponse.builder()
+                .firewallArn(firewallArn)
+                .loggingConfiguration(toSdkLoggingConfiguration(buildLoggingConfiguration(Arrays.asList(config2, config1))))
+                .build();
+
+        final UpdateLoggingConfigurationResponse updateLoggingConfigurationResponse = UpdateLoggingConfigurationResponse.builder()
+                .loggingConfiguration(toSdkLoggingConfiguration(buildLoggingConfiguration(Arrays.asList(config1, config2))))
+                .firewallArn(firewallArn)
+                .firewallName(firewallName)
+                .build();
+
+        when(proxyClient.client().describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class)))
+                .thenReturn(preCheckLoggingConfigurationResponse)
+                .thenReturn(finalLoggingConfigurationResponse);
+
+        when(proxyClient.client().updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class)))
+                .thenReturn(updateLoggingConfigurationResponse);
+
+        final ResourceHandlerRequest<ResourceModel> request = ResourceHandlerRequest.<ResourceModel>builder()
+                .desiredResourceState(model)
+                .build();
+
+        final ProgressEvent<ResourceModel, CallbackContext> response = handler.handleRequest(proxy, request, new CallbackContext(), proxyClient, logger);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus()).isEqualTo(OperationStatus.SUCCESS);
+        assertThat(response.getCallbackDelaySeconds()).isEqualTo(0);
+        assertThat(response.getResourceModels()).isNull();
+        assertThat(response.getMessage()).isNull();
+        assertThat(response.getErrorCode()).isNull();
+
+        verify(proxyClient.client(), times(2)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
+    }
+
+    @Test
     public void handleRequest_ResourceAlreadyExists() {
         LogDestinationConfig config1 = buildLogDestinationConfig("FLOW", "S3");
         LogDestinationConfig config2 = buildLogDestinationConfig("ALERT", "CloudWatchLogs");
