@@ -228,11 +228,11 @@ public class Utils {
     static void stablize(ProxyClient<NetworkFirewallClient> client, ResourceModel model) throws InterruptedException {
         int time = 0;
         do {
+            Thread.sleep(Duration.ofSeconds(5).toMillis());
             if (isStable(client, model)) {
                 return;
             }
             time++;
-            Thread.sleep(Duration.ofSeconds(5).toMillis());
         } while (time < 120);
         throw new CfnNotStabilizedException(ResourceModel.TYPE_NAME, model.getFirewallArn());
     }
@@ -244,14 +244,17 @@ public class Utils {
             describeLoggingConfigurationResponse = client.injectCredentialsAndInvokeV2(
                     describeLoggingConfigurationRequest, client.client()::describeLoggingConfiguration);
 
-            return (model.getLoggingConfiguration() == null &&
-                    (describeLoggingConfigurationResponse.loggingConfiguration() == null ||
-                            CollectionUtils.isNullOrEmpty(
-                                    describeLoggingConfigurationResponse.loggingConfiguration().logDestinationConfigs())))
-                    || describeLoggingConfigurationResponse.loggingConfiguration()
-                    .equals(Translator.toSdkLoggingConfiguration(model.getLoggingConfiguration()));
+            return (model.getLoggingConfiguration() == null && describeLoggingConfigurationResponse.loggingConfiguration() == null)
+                    || isIdentical(model.getLoggingConfiguration().getLogDestinationConfigs(),
+                    toModelLoggingConfiguration(describeLoggingConfigurationResponse.loggingConfiguration()).getLogDestinationConfigs());
         } catch (final Exception e) {
             throw new CfnGeneralServiceException("Failed to retrieve loggingConfiguration definition.");
         }
+    }
+
+    static boolean isIdentical(final List<LogDestinationConfig> desiredLogDestinationConfigs,
+            final List<LogDestinationConfig> currentLogDestinationConfigs) {
+        return desiredLogDestinationConfigs.containsAll(currentLogDestinationConfigs)
+                && currentLogDestinationConfigs.containsAll(desiredLogDestinationConfigs);
     }
 }
