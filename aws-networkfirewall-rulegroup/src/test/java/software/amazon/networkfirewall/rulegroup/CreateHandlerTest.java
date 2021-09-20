@@ -388,6 +388,43 @@ public class CreateHandlerTest extends AbstractTestBase {
     }
 
     @Test
+    public void testHandleRequest_createStatefulRuleGroupSuccess5() {
+        // create request with stateful-rulegroup - with RuleOrder
+        model = ResourceModel
+                .builder()
+                .ruleGroupName(STATEFUL_RULEGROUP_NAME)
+                .ruleGroup(cfnStatefulRuleGroup5)
+                .description(DESCRIPTION)
+                .capacity(CAPACITY)
+                .type(STATEFUL_RULEGROUP_TYPE)
+                .tags(statefulTags)
+                .build();
+        request = ResourceHandlerRequest.<ResourceModel>builder()
+                .desiredResourceState(model)
+                .build();
+
+        when(proxyClient.injectCredentialsAndInvokeV2(createStatefulRuleGroupRequest5, networkFirewallClient::createRuleGroup)).thenReturn(createStatefulRuleGroupResponse5);
+        when(proxyClient.injectCredentialsAndInvokeV2(describeCreateStatefulRuleGroupRequest5, networkFirewallClient::describeRuleGroup)).thenReturn(describeCreateStatefulRuleGroupResponse5);
+
+        final ProgressEvent<ResourceModel, CallbackContext> response = handler.handleRequest(proxy, request, new CallbackContext(), proxyClient, logger);
+
+        verify(proxyClient.client(), times(1)).createRuleGroup(any(CreateRuleGroupRequest.class));
+        verify(proxyClient.client(), times(2)).describeRuleGroup(any(DescribeRuleGroupRequest.class));
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus()).isEqualTo(OperationStatus.SUCCESS);
+        assertThat(response.getCallbackDelaySeconds()).isEqualTo(0);
+        assertThat(response.getResourceModel().getRuleGroupName()).isEqualTo(request.getDesiredResourceState().getRuleGroupName());
+        assertThat(response.getResourceModel().getType()).isEqualTo(request.getDesiredResourceState().getType());
+        assertThat(response.getResourceModels()).isNull();
+        assertThat(response.getMessage()).isNull();
+        assertThat(response.getErrorCode()).isNull();
+
+        // Validate ResourceModel
+        validateStatefulResourceModel(response.getResourceModel(), cfnStatefulRuleGroup5, statefulTags);
+    }
+
+    @Test
     public void testHandleRequest_throwsInvalidRequestException() {
         when(proxyClient.injectCredentialsAndInvokeV2(createStatelessRuleGroupRequest1, networkFirewallClient::createRuleGroup)).thenThrow(InvalidRequestException.class);
 

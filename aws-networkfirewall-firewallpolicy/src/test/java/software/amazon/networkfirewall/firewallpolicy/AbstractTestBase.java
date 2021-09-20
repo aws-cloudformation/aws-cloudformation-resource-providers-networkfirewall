@@ -82,12 +82,14 @@ public class AbstractTestBase {
   private static final String dimension = "dimension";
   private static final String statelessAction = "aws:pass";
   private static final String fragmentStatelessAction = "aws:drop";
+  private static final String statefulAction = "aws:drop_strict";
   private static final String description = "Sample description";
   private static final String status = "ACTIVE";
   private static final String deleting = "DELETING";
   private static final String key = "key";
   private static final String key2 = "key2";
   private static final String value = "value";
+  private static final Integer priority = 101;
 
   public final static ResourceModel RESOURCE_MODEL = ResourceModel
           .builder()
@@ -119,6 +121,7 @@ public class AbstractTestBase {
                           .statefulRuleGroupReferences(
                                   software.amazon.awssdk.services.networkfirewall.model.StatefulRuleGroupReference.builder()
                                           .resourceArn(statefulRuleGroupArn)
+                                          .priority(priority)
                                           .build())
                           .statelessRuleGroupReferences(
                                   software.amazon.awssdk.services.networkfirewall.model.StatelessRuleGroupReference.builder()
@@ -137,8 +140,11 @@ public class AbstractTestBase {
                                   .build())
                           .statelessDefaultActions(statelessAction,actionName)
                           .statelessFragmentDefaultActions(fragmentStatelessAction)
-                          .build()
-                  )
+                          .statefulEngineOptions(software.amazon.awssdk.services.networkfirewall.model.StatefulEngineOptions.builder()
+                                  .ruleOrder(RuleOrder.STRICT_ORDER)
+                                  .build())
+                          .statefulDefaultActions(statefulAction)
+                          .build())
                   .tags(TagList())
                   .build();
 
@@ -181,6 +187,7 @@ public class AbstractTestBase {
                           .statefulRuleGroupReferences(
                                   software.amazon.awssdk.services.networkfirewall.model.StatefulRuleGroupReference.builder()
                                           .resourceArn(statefulRuleGroupArn)
+                                          .priority(priority)
                                           .build())
                           .statelessRuleGroupReferences(
                                   software.amazon.awssdk.services.networkfirewall.model.StatelessRuleGroupReference.builder()
@@ -199,6 +206,10 @@ public class AbstractTestBase {
                                   .build())
                           .statelessDefaultActions(statelessAction,actionName)
                           .statelessFragmentDefaultActions(fragmentStatelessAction)
+                          .statefulDefaultActions(statefulAction)
+                          .statefulEngineOptions(software.amazon.awssdk.services.networkfirewall.model.StatefulEngineOptions.builder()
+                                  .ruleOrder(RuleOrder.STRICT_ORDER)
+                                  .build())
                           .build())
                   .build();
 
@@ -221,6 +232,7 @@ public class AbstractTestBase {
                           .statefulRuleGroupReferences(
                                   software.amazon.awssdk.services.networkfirewall.model.StatefulRuleGroupReference.builder()
                                           .resourceArn(statefulRuleGroupArn)
+                                          .priority(priority)
                                           .build())
                           .statelessRuleGroupReferences(
                                   software.amazon.awssdk.services.networkfirewall.model.StatelessRuleGroupReference.builder()
@@ -239,6 +251,10 @@ public class AbstractTestBase {
                                   .build())
                           .statelessDefaultActions(statelessAction,actionName)
                           .statelessFragmentDefaultActions(fragmentStatelessAction)
+                          .statefulEngineOptions(software.amazon.awssdk.services.networkfirewall.model.StatefulEngineOptions.builder()
+                                  .ruleOrder(RuleOrder.STRICT_ORDER)
+                                  .build())
+                          .statefulDefaultActions(statefulAction)
                           .build()
                   )
                   .build();
@@ -305,12 +321,14 @@ public class AbstractTestBase {
     Set<Dimension> dimensionSet = new HashSet<>();
     Set<String> statelessDefaultAction = new HashSet<>();
     Set<String> fragmentStatelessDefaultAction = new HashSet<>();
+    Set<String> statefulDefaultAction = new HashSet<>();
     statelessReferences.add(StatelessRuleGroupReference.builder()
             .priority(1)
             .resourceArn(statelessRuleGroupArn)
             .build());
     statefulReferences.add(StatefulRuleGroupReference.builder()
             .resourceArn(statefulRuleGroupArn)
+            .priority(101)
             .build());
     dimensionSet.add(Dimension.builder()
             .value(dimension)
@@ -326,6 +344,10 @@ public class AbstractTestBase {
     statelessDefaultAction.add(statelessAction);
     statelessDefaultAction.add(actionName);
     fragmentStatelessDefaultAction.add(fragmentStatelessAction);
+    statefulDefaultAction.add(statefulAction);
+    StatefulEngineOptions statefulEngineOptions = StatefulEngineOptions.builder()
+            .ruleOrder("STRICT_ORDER")
+            .build();
 
     return FirewallPolicy.builder()
             .statefulRuleGroupReferences(statefulReferences)
@@ -333,6 +355,8 @@ public class AbstractTestBase {
             .statelessCustomActions(customAction)
             .statelessDefaultActions(statelessDefaultAction)
             .statelessFragmentDefaultActions(fragmentStatelessDefaultAction)
+            .statefulEngineOptions(statefulEngineOptions)
+            .statefulDefaultActions(statefulDefaultAction)
             .build();
   }
 

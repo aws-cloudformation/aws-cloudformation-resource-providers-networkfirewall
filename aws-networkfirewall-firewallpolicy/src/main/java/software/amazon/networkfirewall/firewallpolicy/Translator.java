@@ -15,6 +15,7 @@ import software.amazon.awssdk.services.networkfirewall.model.ActionDefinition;
 import software.amazon.awssdk.services.networkfirewall.model.Dimension;
 import software.amazon.awssdk.services.networkfirewall.model.PublishMetricAction;
 import software.amazon.awssdk.services.networkfirewall.model.StatefulRuleGroupReference;
+import software.amazon.awssdk.services.networkfirewall.model.StatefulEngineOptions;
 import software.amazon.awssdk.services.networkfirewall.model.StatelessRuleGroupReference;
 import software.amazon.awssdk.services.networkfirewall.model.UpdateFirewallPolicyRequest;
 
@@ -181,7 +182,26 @@ public class Translator {
             .statelessFragmentDefaultActions(responsePolicy.statelessFragmentDefaultActions().size() != 0
                     ? translateDefaultActionFromSDK(responsePolicy.statelessFragmentDefaultActions()) : null)
             .statelessCustomActions(responsePolicy.statelessCustomActions() != null && responsePolicy.statelessCustomActions().size() != 0 ? translateCustomActionsFromSDK(responsePolicy.statelessCustomActions()): null)
+            .statefulEngineOptions(responsePolicy.statefulEngineOptions() != null ? translateStatefulEngineOptionsFromSDK(responsePolicy.statefulEngineOptions()) : null)
+            .statefulDefaultActions(responsePolicy.statefulDefaultActions() != null && responsePolicy.statefulDefaultActions().size() != 0
+                    ? translateDefaultActionFromSDK(responsePolicy.statefulDefaultActions()) : null)
             .build();
+  }
+
+  private static software.amazon.networkfirewall.firewallpolicy.StatefulEngineOptions translateStatefulEngineOptionsFromSDK(final StatefulEngineOptions statefulEngineOptions) {
+    if (statefulEngineOptions == null) {
+      return null;
+    }
+    return software.amazon.networkfirewall.firewallpolicy.StatefulEngineOptions.builder()
+            .ruleOrder(translateRuleOrderFromSdk(statefulEngineOptions.ruleOrder()))
+            .build();
+  }
+
+  private static String translateRuleOrderFromSdk(final software.amazon.awssdk.services.networkfirewall.model.RuleOrder ruleOrder) {
+    if (ruleOrder == null) {
+      return null;
+    }
+    return ruleOrder.toString();
   }
 
   private static Set<software.amazon.networkfirewall.firewallpolicy.StatefulRuleGroupReference> translateStatefulRuleGroupReferenceFromSDK (
@@ -191,7 +211,9 @@ public class Translator {
     for (StatefulRuleGroupReference reference : references) {
       software.amazon.networkfirewall.firewallpolicy.StatefulRuleGroupReference tempRef =
               software.amazon.networkfirewall.firewallpolicy.StatefulRuleGroupReference.builder()
-                      .resourceArn(reference.resourceArn()).build();
+                      .resourceArn(reference.resourceArn())
+                      .priority(reference.priority())
+                      .build();
       result.add(tempRef);
     }
     return result;
@@ -258,7 +280,12 @@ public class Translator {
                     ? translateDefaultActionToSDK(policy.getStatelessDefaultActions()) : null)
             .statelessFragmentDefaultActions(policy.getStatelessFragmentDefaultActions().size() != 0
                     ? translateDefaultActionToSDK(policy.getStatelessFragmentDefaultActions()) : null)
-            .statelessCustomActions( policy.getStatelessCustomActions() != null && policy.getStatelessCustomActions().size() != 0 ? translateCustomActionsToSDK(policy.getStatelessCustomActions()): null)
+            .statelessCustomActions(policy.getStatelessCustomActions() != null && policy.getStatelessCustomActions().size() != 0
+                    ? translateCustomActionsToSDK(policy.getStatelessCustomActions()): null)
+            .statefulEngineOptions(policy.getStatefulEngineOptions() != null
+                    ? translateStatefulEngineOptionsToSdk(policy.getStatefulEngineOptions()) : null)
+            .statefulDefaultActions(policy.getStatefulDefaultActions() != null && policy.getStatefulDefaultActions().size() != 0
+                    ? translateDefaultActionToSDK(policy.getStatefulDefaultActions()) : null)
             .build();
   }
 
@@ -268,7 +295,9 @@ public class Translator {
 
     for (software.amazon.networkfirewall.firewallpolicy.StatefulRuleGroupReference reference : references) {
       StatefulRuleGroupReference tempRef = StatefulRuleGroupReference.builder()
-                      .resourceArn(reference.getResourceArn()).build();
+                      .resourceArn(reference.getResourceArn())
+                      .priority(reference.getPriority())
+                      .build();
       result.add(tempRef);
     }
     return result;
@@ -322,5 +351,20 @@ public class Translator {
 
   private static List<String> translateDefaultActionToSDK (final Set<String> actions) {
     return new ArrayList<>(actions);
+  }
+
+  private static StatefulEngineOptions translateStatefulEngineOptionsToSdk(
+          final software.amazon.networkfirewall.firewallpolicy.StatefulEngineOptions statefulEngineOptions) {
+    return software.amazon.awssdk.services.networkfirewall.model.StatefulEngineOptions.builder()
+            .ruleOrder(translateRuleOrderToSdk(statefulEngineOptions.getRuleOrder()))
+            .build();
+  }
+
+  private static software.amazon.awssdk.services.networkfirewall.model.RuleOrder translateRuleOrderToSdk(
+          final String ruleOrder) {
+    if (ruleOrder == null) {
+      return null;
+    }
+    return software.amazon.awssdk.services.networkfirewall.model.RuleOrder.fromValue(ruleOrder);
   }
 }
