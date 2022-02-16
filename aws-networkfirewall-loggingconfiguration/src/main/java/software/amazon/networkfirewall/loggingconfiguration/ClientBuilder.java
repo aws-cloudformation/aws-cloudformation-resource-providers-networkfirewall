@@ -18,7 +18,7 @@ public class ClientBuilder {
     if (region.equals("us-gov-west-1") || region.equals("us-gov-east-1")) {
       return () -> (NetworkFirewallClient) NetworkFirewallClient.builder()
               .httpClient(LambdaWrapper.HTTP_CLIENT)
-              .fipsEnabled(true))
+              .fipsEnabled(true)
               .build();
     }
     return () -> (NetworkFirewallClient) NetworkFirewallClient.builder()
