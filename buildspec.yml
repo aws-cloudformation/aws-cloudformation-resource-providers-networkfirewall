@@ -5,6 +5,7 @@ phases:
         java: openjdk8
         python: 3.7
     commands:
+      -  pip install pyyaml --upgrade
       -  pip install pre-commit cloudformation-cli-java-plugin
       -  pip install --upgrade 'six==1.15.0'
   build:
