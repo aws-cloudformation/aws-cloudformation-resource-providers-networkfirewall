@@ -75,12 +75,24 @@
           "items": {
             "$ref": "#/definitions/StatefulRuleGroupReference"
           }
+        },
+        "StatefulDefaultActions": {
+          "type": "array",
+          "insertionOrder": false,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "StatefulEngineOptions": {
+          "$ref": "#/definitions/StatefulEngineOptions"
         }
       },
       "required": [
         "StatelessDefaultActions",
         "StatelessFragmentDefaultActions"
-      ]
+      ],
+      "additionalProperties": false
     },
     "CustomAction": {
       "type": "object",
@@ -98,7 +110,8 @@
       "required": [
         "ActionName",
         "ActionDefinition"
-      ]
+      ],
+      "additionalProperties": false
     },
     "ActionDefinition": {
       "type": "object",
@@ -106,7 +119,8 @@
         "PublishMetricAction": {
           "$ref": "#/definitions/PublishMetricAction"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PublishMetricAction": {
       "type": "object",
@@ -122,7 +136,8 @@
       },
       "required": [
         "Dimensions"
-      ]
+      ],
+      "additionalProperties": false
     },
     "Dimension": {
       "type": "object",
@@ -136,18 +151,23 @@
       },
       "required": [
         "Value"
-      ]
+      ],
+      "additionalProperties": false
     },
     "StatefulRuleGroupReference": {
       "type": "object",
       "properties": {
         "ResourceArn": {
           "$ref": "#/definitions/ResourceArn"
+        },
+        "Priority": {
+          "$ref": "#/definitions/Priority"
         }
       },
       "required": [
         "ResourceArn"
-      ]
+      ],
+      "additionalProperties": false
     },
     "StatelessRuleGroupReference": {
       "type": "object",
@@ -156,14 +176,34 @@
           "$ref": "#/definitions/ResourceArn"
         },
         "Priority": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 65535
+          "$ref": "#/definitions/Priority"
         }
       },
       "required": [
         "ResourceArn",
         "Priority"
+      ],
+      "additionalProperties": false
+    },
+    "Priority": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 65535
+    },
+    "StatefulEngineOptions": {
+      "type": "object",
+      "properties": {
+        "RuleOrder": {
+          "$ref": "#/definitions/RuleOrder"
+        }
+      },
+      "additionalProperties": false
+    },
+    "RuleOrder": {
+      "type": "string",
+      "enum": [
+        "DEFAULT_ACTION_ORDER",
+        "STRICT_ORDER"
       ]
     }
   },

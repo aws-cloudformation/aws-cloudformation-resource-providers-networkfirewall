@@ -100,7 +100,6 @@ public class DeleteHandlerTest extends AbstractTestBase {
         assertThat(response.getErrorCode()).isNull();
 
         verify(proxyClient.client(), times(1)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
-        verify(proxyClient.client(), times(2)).describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class));
     }
 
     @Test
@@ -131,7 +130,8 @@ public class DeleteHandlerTest extends AbstractTestBase {
 
         when(proxyClient.client().describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class)))
                 .thenReturn(preCheckLoggingConfigurationResponse)
-                .thenReturn(preCheckLoggingConfigurationResponse);
+                .thenReturn(preCheckLoggingConfigurationResponse)
+                .thenReturn(finalLoggingConfigurationResponse);
 
         when(proxyClient.client().updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class)))
                 .thenReturn(updateLoggingConfigurationResponse1)
@@ -152,7 +152,6 @@ public class DeleteHandlerTest extends AbstractTestBase {
         assertThat(response.getErrorCode()).isNull();
 
         verify(proxyClient.client(), times(2)).updateLoggingConfiguration(any(UpdateLoggingConfigurationRequest.class));
-        verify(proxyClient.client(), times(2)).describeLoggingConfiguration(any(DescribeLoggingConfigurationRequest.class));
     }
 
     @Test

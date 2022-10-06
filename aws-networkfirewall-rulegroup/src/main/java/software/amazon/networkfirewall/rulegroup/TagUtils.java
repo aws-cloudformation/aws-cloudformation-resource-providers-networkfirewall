@@ -25,7 +25,7 @@ public class TagUtils {
         this.tagsDiff = computeTagsDiff();
     }
 
-    // tags to add contains both new tags and exiting tag with new value
+    // tags to add contains both new tags and existing tag with new value
     public Map<String, String> tagsToAddOrUpdate() {
         Map<String, String> tagsToAdd = new HashMap<>(tagsDiff.entriesOnlyOnRight());
         // get the tags for those value has changed

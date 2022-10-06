@@ -40,10 +40,12 @@ public class UpdateHandler extends BaseHandlerStd {
 
         try {
             convertTemplateToUpdateLoggingConfigurationCall(model, proxyClient);
+
+            Utils.stablize(proxyClient, model);
             return new ReadHandler().handleRequest(proxy, request, callbackContext, proxyClient, logger);
         } catch(InvalidRequestException e){
             throw new CfnInvalidRequestException(e);
-        } catch (InternalServerErrorException | LogDestinationPermissionException | ResourceNotFoundException e) {
+        } catch (InternalServerErrorException | LogDestinationPermissionException | ResourceNotFoundException | InterruptedException e) {
             throw new CfnServiceInternalErrorException(ResourceModel.TYPE_NAME, e);
         } catch (ThrottlingException e) {
             throw new CfnThrottlingException(ResourceModel.TYPE_NAME, e);
