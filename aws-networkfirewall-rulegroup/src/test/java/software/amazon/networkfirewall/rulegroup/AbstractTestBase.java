@@ -19,6 +19,7 @@ import software.amazon.awssdk.services.networkfirewall.model.CreateRuleGroupRequ
 import software.amazon.awssdk.services.networkfirewall.model.CreateRuleGroupResponse;
 import software.amazon.awssdk.services.networkfirewall.model.DescribeRuleGroupRequest;
 import software.amazon.awssdk.services.networkfirewall.model.DescribeRuleGroupResponse;
+import software.amazon.awssdk.services.networkfirewall.model.RuleOrder;
 import software.amazon.awssdk.services.networkfirewall.model.TagResourceRequest;
 import software.amazon.awssdk.services.networkfirewall.model.TargetType;
 import software.amazon.awssdk.services.networkfirewall.model.UntagResourceRequest;
@@ -71,19 +72,20 @@ public class AbstractTestBase {
     protected static final String ACTIVE = "ACTIVE";
     protected static final String DELETING = "DELETING";
     protected static final String STATEFUL_PASS_RULE = "pass tcp 10.20.20.0/24 45400:45500 <> 10.10.10.0/24";
+    protected static final String STRICT_RULE_ORDER = "STRICT_ORDER";
 
     protected RuleGroup cfnStatelessRuleGroup1, cfnStatelessRuleGroup2, cfnStatelessRuleGroup3;
-    protected RuleGroup cfnStatefulRuleGroup1, cfnStatefulRuleGroup2, cfnStatefulRuleGroup3, cfnStatefulRuleGroup4;
+    protected RuleGroup cfnStatefulRuleGroup1, cfnStatefulRuleGroup2, cfnStatefulRuleGroup3, cfnStatefulRuleGroup4, cfnStatefulRuleGroup5;
     protected software.amazon.awssdk.services.networkfirewall.model.RuleGroup statelessSdkRuleGroup1, statelessSdkRuleGroup2, statelessSdkRuleGroup3;
     protected software.amazon.awssdk.services.networkfirewall.model.RuleGroupResponse statelessSdkRuleGroupResponseWithNoTags,
             statelessSdkRuleGroupResponseWithTags;
     protected software.amazon.awssdk.services.networkfirewall.model.RuleGroupResponse statefulSdkRuleGroupResponseWithNoTags,
             statefulSdkRuleGroupResponseWithTags;
-    protected software.amazon.awssdk.services.networkfirewall.model.RuleGroup statefulSdkRuleGroup1, statefulSdkRuleGroup2, statefulSdkRuleGroup3, statefulSdkRuleGroup4;
+    protected software.amazon.awssdk.services.networkfirewall.model.RuleGroup statefulSdkRuleGroup1, statefulSdkRuleGroup2, statefulSdkRuleGroup3, statefulSdkRuleGroup4, statefulSdkRuleGroup5;
     protected CreateRuleGroupRequest createStatelessRuleGroupRequest1, createStatelessRuleGroupRequest2, createStatelessRuleGroupRequest3;
     protected CreateRuleGroupResponse createStatelessRuleGroupResponse1, createStatelessRuleGroupResponse2, createStatelessRuleGroupResponse3;
-    protected CreateRuleGroupRequest createStatefulRuleGroupRequest1, createStatefulRuleGroupRequest2, createStatefulRuleGroupRequest3, createStatefulRuleGroupRequest4;
-    protected CreateRuleGroupResponse createStatefulRuleGroupResponse1, createStatefulRuleGroupResponse2, createStatefulRuleGroupResponse3, createStatefulRuleGroupResponse4;
+    protected CreateRuleGroupRequest createStatefulRuleGroupRequest1, createStatefulRuleGroupRequest2, createStatefulRuleGroupRequest3, createStatefulRuleGroupRequest4, createStatefulRuleGroupRequest5;
+    protected CreateRuleGroupResponse createStatefulRuleGroupResponse1, createStatefulRuleGroupResponse2, createStatefulRuleGroupResponse3, createStatefulRuleGroupResponse4, createStatefulRuleGroupResponse5;
     protected DescribeRuleGroupRequest describeCreateStatelessRuleGroupRequest1, describeCreateStatelessRuleGroupRequest2,
             describeCreateStatelessRuleGroupRequest3, describeStatelessRuleGroupRequestWithArn;
     protected DescribeRuleGroupResponse describeCreateStatelessRuleGroupResponse1, describeCreateStatelessRuleGroupResponse2, describeCreateStatelessRuleGroupResponse3;
@@ -91,9 +93,9 @@ public class AbstractTestBase {
     protected DescribeRuleGroupResponse describeUpdateStatelessRuleGroupResponse1, describeUpdateStatelessRuleGroupResponse2, describeUpdateStatelessRuleGroupResponse3;
     protected Set<Tag> statelessTags, statefulTags;
     protected DescribeRuleGroupRequest describeCreateStatefulRuleGroupRequest1, describeCreateStatefulRuleGroupRequest2, describeCreateStatefulRuleGroupRequest3,
-            describeCreateStatefulRuleGroupRequest4, describeStatefulRuleGroupRequestWithArn;
+            describeCreateStatefulRuleGroupRequest4, describeCreateStatefulRuleGroupRequest5, describeStatefulRuleGroupRequestWithArn;
     protected DescribeRuleGroupResponse describeCreateStatefulRuleGroupResponse1, describeCreateStatefulRuleGroupResponse2,
-            describeCreateStatefulRuleGroupResponse3, describeCreateStatefulRuleGroupResponse4;
+            describeCreateStatefulRuleGroupResponse3, describeCreateStatefulRuleGroupResponse4, describeCreateStatefulRuleGroupResponse5;
     protected UpdateRuleGroupRequest updateStatelessRuleGroupRequest1, updateStatelessRuleGroupRequest2, updateStatelessRuleGroupRequest3;
     protected UpdateRuleGroupResponse updateStatelessRuleGroupResponse1, updateStatelessRuleGroupResponse2, updateStatelessRuleGroupResponse3;
     protected UpdateRuleGroupRequest updateStatefulRuleGroupRequest1, updateStatefulRuleGroupRequest2, updateStatefulRuleGroupRequest3;
@@ -662,11 +664,13 @@ public class AbstractTestBase {
         cfnStatefulRuleGroup2 = createStatefulRuleGroup2();
         cfnStatefulRuleGroup3 = createStatefulRuleGroup3();
         cfnStatefulRuleGroup4 = createStatefulRuleGroup4();
+        cfnStatefulRuleGroup5 = createStatefulRuleGroup5();
 
         statefulSdkRuleGroup1 = translateToStatefulSdkRuleGroup1();
         statefulSdkRuleGroup2 = translateToStatefulSdkRuleGroup2();
         statefulSdkRuleGroup3 = translateToStatefulSdkRuleGroup3();
         statefulSdkRuleGroup4 = translateToStatefulSdkRuleGroup4();
+        statefulSdkRuleGroup5 = translateToStatefulSdkRuleGroup5();
 
         statefulTags = Collections.singleton(Tag.builder()
                 .key("rule-group")
@@ -811,6 +815,33 @@ public class AbstractTestBase {
         describeCreateStatefulRuleGroupResponse4 = DescribeRuleGroupResponse.builder()
                 .ruleGroupResponse(statefulSdkRuleGroupResponseWithTags)
                 .ruleGroup(statefulSdkRuleGroup4)
+                .updateToken(UPDATE_TOKEN)
+                .build();
+
+        // Stateful RuleGroup Request with tags - request5
+        createStatefulRuleGroupRequest5 = CreateRuleGroupRequest.builder()
+                .ruleGroup(statefulSdkRuleGroup5)
+                .capacity(CAPACITY)
+                .description(DESCRIPTION)
+                .type(STATEFUL_RULEGROUP_TYPE)
+                .ruleGroupName(STATEFUL_RULEGROUP_NAME)
+                .tags(sdkStatefulTags)
+                .build();
+
+        createStatefulRuleGroupResponse5 = CreateRuleGroupResponse.builder()
+                .ruleGroupResponse(statefulSdkRuleGroupResponseWithTags)
+                .updateToken(UPDATE_TOKEN)
+                .build();
+
+        describeCreateStatefulRuleGroupRequest5 = DescribeRuleGroupRequest.builder()
+                .ruleGroupName(STATEFUL_RULEGROUP_NAME)
+                .type(STATEFUL_RULEGROUP_TYPE)
+                .ruleGroupArn(STATEFUL_RULEGROUP_ARN)
+                .build();
+
+        describeCreateStatefulRuleGroupResponse5 = DescribeRuleGroupResponse.builder()
+                .ruleGroupResponse(statefulSdkRuleGroupResponseWithTags)
+                .ruleGroup(statefulSdkRuleGroup5)
                 .updateToken(UPDATE_TOKEN)
                 .build();
 
@@ -1007,6 +1038,56 @@ public class AbstractTestBase {
                         .ipSets(ImmutableMap.of("test", software.amazon.awssdk.services.networkfirewall.model.IPSet.builder()
                                 .definition(Collections.singleton("test-definition-1, test-definition-2"))
                                 .build()))
+                        .build())
+                .build();
+    }
+
+    private RuleGroup createStatefulRuleGroup5() {
+        return RuleGroup.builder()
+                .rulesSource(RulesSource.builder()
+                        .statefulRules(Collections.singleton(StatefulRule.builder()
+                                .action("PASS")
+                                .header(Header.builder()
+                                        .sourcePort("any")
+                                        .destinationPort("any")
+                                        .source("$HOME_NET")
+                                        .destination("$EXTERNAL_NET")
+                                        .protocol("TCP")
+                                        .direction("FORWARD")
+                                        .build())
+                                .ruleOptions(Collections.singleton(RuleOption.builder()
+                                        .keyword("sid")
+                                        .settings(Collections.singleton("100"))
+                                        .build()))
+                                .build()))
+                        .build())
+                .statefulRuleOptions(StatefulRuleOptions.builder()
+                        .ruleOrder("STRICT_ORDER")
+                        .build())
+                .build();
+    }
+
+    private software.amazon.awssdk.services.networkfirewall.model.RuleGroup translateToStatefulSdkRuleGroup5() {
+        return software.amazon.awssdk.services.networkfirewall.model.RuleGroup.builder()
+                .rulesSource(software.amazon.awssdk.services.networkfirewall.model.RulesSource.builder()
+                        .statefulRules(Collections.singleton(software.amazon.awssdk.services.networkfirewall.model.StatefulRule.builder()
+                                .action("PASS")
+                                .header(software.amazon.awssdk.services.networkfirewall.model.Header.builder()
+                                        .protocol("TCP")
+                                        .source("$HOME_NET")
+                                        .direction("FORWARD")
+                                        .sourcePort("any")
+                                        .destinationPort("any")
+                                        .destination("$EXTERNAL_NET")
+                                        .build())
+                                .ruleOptions(Collections.singleton(software.amazon.awssdk.services.networkfirewall.model.RuleOption.builder()
+                                        .settings("100")
+                                        .keyword("sid")
+                                        .build()))
+                                .build()))
+                        .build())
+                .statefulRuleOptions(software.amazon.awssdk.services.networkfirewall.model.StatefulRuleOptions.builder()
+                        .ruleOrder(RuleOrder.STRICT_ORDER)
                         .build())
                 .build();
     }

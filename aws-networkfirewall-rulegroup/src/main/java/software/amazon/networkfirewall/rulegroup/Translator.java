@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.networkfirewall.model.DescribeRuleGroupRe
 import software.amazon.awssdk.services.networkfirewall.model.ListRuleGroupsRequest;
 import software.amazon.awssdk.services.networkfirewall.model.ListRuleGroupsResponse;
 import software.amazon.awssdk.services.networkfirewall.model.RuleGroupResponse;
+import software.amazon.awssdk.services.networkfirewall.model.RuleOrder;
 import software.amazon.awssdk.services.networkfirewall.model.TagResourceRequest;
 import software.amazon.awssdk.services.networkfirewall.model.UntagResourceRequest;
 import software.amazon.awssdk.services.networkfirewall.model.UpdateRuleGroupRequest;
@@ -173,7 +174,25 @@ public class Translator {
         return software.amazon.awssdk.services.networkfirewall.model.RuleGroup.builder()
                 .rulesSource(translateRuleSourceToSdk(ruleGroup.getRulesSource()))
                 .ruleVariables(translateRuleVariablesToSdk(ruleGroup.getRuleVariables()))
+                .statefulRuleOptions(translateStatefulRuleOptionsToSdk(ruleGroup.getStatefulRuleOptions()))
                 .build();
+    }
+
+    static software.amazon.awssdk.services.networkfirewall.model.StatefulRuleOptions translateStatefulRuleOptionsToSdk(
+            final StatefulRuleOptions statefulRuleOptions) {
+        if (statefulRuleOptions == null) {
+            return null;
+        }
+        return software.amazon.awssdk.services.networkfirewall.model.StatefulRuleOptions.builder()
+                .ruleOrder(translateRuleOrderToSdk(statefulRuleOptions.getRuleOrder()))
+                .build();
+    }
+
+    static software.amazon.awssdk.services.networkfirewall.model.RuleOrder translateRuleOrderToSdk(final String ruleOrder) {
+        if (ruleOrder == null) {
+            return null;
+        }
+        return software.amazon.awssdk.services.networkfirewall.model.RuleOrder.fromValue(ruleOrder);
     }
 
     static software.amazon.awssdk.services.networkfirewall.model.RulesSource translateRuleSourceToSdk(final RulesSource rulesSource) {
@@ -535,7 +554,24 @@ public class Translator {
         return RuleGroup.builder()
                 .rulesSource(translateRuleSourceFromSdk(ruleGroup.rulesSource()))
                 .ruleVariables(translateRuleVariablesFromSdk(ruleGroup.ruleVariables()))
+                .statefulRuleOptions(translateStatefulRuleOptionsFromSdk(ruleGroup.statefulRuleOptions()))
                 .build();
+    }
+
+    static StatefulRuleOptions translateStatefulRuleOptionsFromSdk(final software.amazon.awssdk.services.networkfirewall.model.StatefulRuleOptions statefulRuleOptions) {
+        if (statefulRuleOptions == null) {
+            return null;
+        }
+        return StatefulRuleOptions.builder()
+                .ruleOrder(translateRuleOrderFromSdk(statefulRuleOptions.ruleOrder()))
+                .build();
+    }
+
+    static String translateRuleOrderFromSdk(final software.amazon.awssdk.services.networkfirewall.model.RuleOrder ruleOrder) {
+        if (ruleOrder == null) {
+            return null;
+        }
+        return ruleOrder.toString();
     }
 
     static RulesSource translateRuleSourceFromSdk(final software.amazon.awssdk.services.networkfirewall.model.RulesSource rulesSource) {
