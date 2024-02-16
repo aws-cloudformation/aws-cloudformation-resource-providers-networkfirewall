@@ -78,6 +78,7 @@ public class Translator {
             // add AZName in the suffix of the endpointID.
             endpointIds.add(String.format("%s:%s", azName, state.attachment().endpointId()));
         }
+        endpointIds.sort(String.CASE_INSENSITIVE_ORDER);
 
         return endpointIds;
     }

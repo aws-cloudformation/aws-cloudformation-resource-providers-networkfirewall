@@ -111,9 +111,11 @@ public class ReadHandlerTest extends AbstractTestBase {
                 .firewallId("id").firewallArn("validarn").firewallName("firewallName").firewallPolicyArn("policyarn")
                 .vpcId("vpcId").tags(tags).build();
         final Map<String, SyncState> syncStates = ImmutableMap.of(
-            "us-west-2a", SyncState.builder().attachment(Attachment.builder().endpointId("endpoint-1").build()).build(),
             "us-west-2b", SyncState.builder().attachment(Attachment.builder().endpointId("endpoint-2").build()).build(),
-            "us-west-2c", SyncState.builder().attachment(Attachment.builder().endpointId("endpoint-3").build()).build());
+            "us-east-1b", SyncState.builder().attachment(Attachment.builder().endpointId("endpoint-2").build()).build(),
+            "us-west-2a", SyncState.builder().attachment(Attachment.builder().endpointId("endpoint-1").build()).build(),
+            "US-WEST-2c", SyncState.builder().attachment(Attachment.builder().endpointId("endpoint-3").build()).build(),
+            "US-EAST-1a", SyncState.builder().attachment(Attachment.builder().endpointId("endpoint-1").build()).build());
 
         final software.amazon.awssdk.services.networkfirewall.model.FirewallStatus status =
                 software.amazon.awssdk.services.networkfirewall.model.FirewallStatus.builder()
@@ -153,9 +155,11 @@ public class ReadHandlerTest extends AbstractTestBase {
         assertThat(model.getVpcId()).isEqualTo("vpcId");
         assertThat(model.getTags().size()).isEqualTo(3);
         assertThat(model.getTags()).isEqualTo(resourceModelTags);
-        assertThat(model.getEndpointIds().get(0)).isEqualTo("us-west-2a:endpoint-1");
-        assertThat(model.getEndpointIds().get(1)).isEqualTo("us-west-2b:endpoint-2");
-        assertThat(model.getEndpointIds().get(2)).isEqualTo("us-west-2c:endpoint-3");
+        assertThat(model.getEndpointIds().get(0)).isEqualTo("US-EAST-1a:endpoint-1");
+        assertThat(model.getEndpointIds().get(1)).isEqualTo("us-east-1b:endpoint-2");
+        assertThat(model.getEndpointIds().get(2)).isEqualTo("us-west-2a:endpoint-1");
+        assertThat(model.getEndpointIds().get(3)).isEqualTo("us-west-2b:endpoint-2");
+        assertThat(model.getEndpointIds().get(4)).isEqualTo("US-WEST-2c:endpoint-3");
 
         verify(proxyClient.client()).describeFirewall(any(DescribeFirewallRequest.class));
     }
